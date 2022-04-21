@@ -2,9 +2,10 @@ package com.example.oreo.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",uniqueConstraints = { @UniqueConstraint(columnNames = { "email", "userName" }) })
 
 public class User {
 
@@ -16,36 +17,29 @@ public class User {
     private String firstName;
     @Column(name = "lase_name")
     private String lastName;
+    private String userName;
     private String email;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
-            name = "user_games",
+            name = "user_roles",
             joinColumns = @JoinColumn(
                     name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "game_id",referencedColumnName = "id")
+                    name = "role_id",referencedColumnName = "id")
     )
-    Collection<Game> games;
-    public User(String firstName, String lastName, String email, String password,Collection<Game> games) {
+    Collection<Role> roles;
+    public User(String firstName, String lastName, String userName,String email, String password,Collection<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userName = userName;
         this.email = email;
         this.password = password;
-        this.games = games;
+        this.roles = roles;
     }
 
     public User() {
 
-    }
-
-
-    public Collection<Game> getGames() {
-        return games;
-    }
-
-    public void setGames(Collection<Game> games) {
-        this.games = games;
     }
 
     public int getId() {
@@ -88,4 +82,19 @@ public class User {
         this.password = password;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
 }

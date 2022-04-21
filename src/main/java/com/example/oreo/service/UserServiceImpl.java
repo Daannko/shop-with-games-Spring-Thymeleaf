@@ -1,6 +1,7 @@
 package com.example.oreo.service;
 
 import com.example.oreo.model.Game;
+import com.example.oreo.model.Role;
 import com.example.oreo.model.User;
 import com.example.oreo.repository.UserRepository;
 import com.example.oreo.service.web.dto.UserRegistrationDto;
@@ -38,8 +39,9 @@ public class UserServiceImpl implements UserService {
 
         User user = new User(registrationDto.getFirstName(),
                             registrationDto.getLastName(),
+                registrationDto.getUserName(),
                 registrationDto.getEmail(),
-                passwordEncoder.encode(registrationDto.getPassword()), List.of(new Game("GAME_USER")));
+                passwordEncoder.encode(registrationDto.getPassword()), List.of(new Role("ROLE_USER")));
 
         return userRepository.save(user);
     }
@@ -47,15 +49,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(username);
+        User user = userRepository.findByUserName(username);
         if(user == null){
             throw new UsernameNotFoundException("Invalid username or password");
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),mapGamesToAuthorities(user.getGames()));
+        return new org.springframework.security.core.userdetails.User(user.getUserName(),user.getPassword(),mapGamesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapGamesToAuthorities(Collection<Game> games){
-        return games.stream().map(game -> new SimpleGrantedAuthority(game.getName())).collect(Collectors.toList());
+    private Collection<? extends GrantedAuthority> mapGamesToAuthorities(Collection<Role> roles){
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
 
