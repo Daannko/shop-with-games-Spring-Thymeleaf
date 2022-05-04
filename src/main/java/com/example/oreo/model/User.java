@@ -42,6 +42,12 @@ public class User {
 
     }
 
+    public String returnRole()
+    {
+        Role role = roles.stream().findFirst().orElse(new Role("UNKNOWN"));
+        return role.getName();
+    }
+
     public int getId() {
         return id;
     }

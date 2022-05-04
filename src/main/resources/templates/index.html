@@ -38,9 +38,11 @@
 <br>
 
 <div class="container">
-    <h1>Registration and Login with Spring Boot, Spring Security,
-        Thymeleaf, Hibernate and MySQL</h1>
-    Welcome <span sec:authentication="principal.username"> User</span>
+    <h1>Welcome to homepage</h1>
+    <span sec:authentication="principal.username"> User</span>
+    <div class="form-group">
+        <span><a href="/" th:href="@{/admin}">Add Game</a></span>
+    </div>
 </div>
 </body>
 </html>

@@ -20,6 +20,12 @@ public class Game {
         this.price = price;
     }
 
+    public Game(String name, Integer price) {
+        this.name = name;
+        this.price = price;
+    }
+
+
     public Game() {
 
     }
