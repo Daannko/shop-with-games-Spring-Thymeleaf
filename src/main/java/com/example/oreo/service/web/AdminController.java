@@ -4,6 +4,7 @@ package com.example.oreo.service.web;
 import com.example.oreo.model.Game;
 import com.example.oreo.model.User;
 import com.example.oreo.repository.GameRepository;
+import com.example.oreo.repository.UserRepository;
 import com.example.oreo.service.GameService;
 import com.example.oreo.service.UserService;
 import com.example.oreo.service.web.dto.GameAddDto;
@@ -26,11 +27,14 @@ public class AdminController {
 
     private GameService gameService;
     private UserService userService;
+    private UserRepository userRepository;
 
-    public AdminController(GameService gameService,UserService userService) {
+
+    public AdminController(GameService gameService,UserService userService,UserRepository userRepository) {
         super();
         this.gameService = gameService;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @ModelAttribute("game")
@@ -48,7 +52,7 @@ public class AdminController {
     {
         model.addAttribute("game",new GameAddDto());
         model.addAttribute("games", gameService.returnGames());
-        model.addAttribute("users", userService.returnUsers());
+        model.addAttribute("users", userRepository.findAll());
         return "admin";
     }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
   <meta charset="ISO-8859-1">
   <title>Registration</title>
@@ -24,6 +25,18 @@
       </button>
       <a class="navbar-brand" href="#" th:href="@{/}">Registration and
         Login Module</a>
+
+      <ul class="nav navbar-nav">
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+      </ul>
+
+
+      <ul class="nav navbar-nav">
+          <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+
+
+
     </div>
   </div>
 </nav>
@@ -71,7 +84,7 @@
           </thead>
           <tbody>
           <tr th:if="${games.isEmpty()}">
-            <td colspan="2"> No Books Available </td>
+            <td colspan="2"> No Games Available </td>
           </tr>
           <tr th:each="game : ${games}">
             <td class="tablespace"><span th:text="*{game.name}"> Name </span></td>

@@ -26,11 +26,11 @@
             <a class="navbar-brand" href="#" th:href="@{/}">Registration and
                 Login Module</a>
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
-            </ul>
+        <div>
+            <!--Tu KOD-->
         </div>
+
+
     </div>
 </nav>
 
@@ -39,7 +39,12 @@
 
 <div class="container">
     <h1>Welcome to homepage</h1>
-    <span sec:authentication="principal.username"> User</span>
+    <span th:text="CZESC"></span>
+
+    <div th:if="${userInfo == null}">
+        <div class="alert alert-danger">Invalid username or
+            password.</div>
+    </div>
     <div class="form-group">
         <span><a href="/" th:href="@{/admin}">Add Game</a></span>
     </div>

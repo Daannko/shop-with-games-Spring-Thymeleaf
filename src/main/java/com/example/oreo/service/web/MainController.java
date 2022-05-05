@@ -12,10 +12,4 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("/index")
-    String home()
-    {
-        return"index";
-    }
-
 }
