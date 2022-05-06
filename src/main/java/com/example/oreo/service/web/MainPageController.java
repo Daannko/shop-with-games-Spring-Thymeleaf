@@ -1,7 +1,9 @@
 package com.example.oreo.service.web;
 
 
+import com.example.oreo.model.Game;
 import com.example.oreo.model.User;
+import com.example.oreo.repository.GameRepository;
 import com.example.oreo.repository.UserRepository;
 import com.example.oreo.service.GameService;
 import com.example.oreo.service.UserService;
@@ -18,23 +20,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/index")
+@RequestMapping("/")
 public class MainPageController {
 
     private UserRepository userRepository;
+    private GameRepository gameRepository;
 
 
-    public MainPageController(UserRepository userRepository) {
+    public MainPageController(UserRepository userRepository,GameRepository gameRepository) {
         super();
         this.userRepository = userRepository;
+        this.gameRepository = gameRepository;
     }
 
-/*    @ModelAttribute("game")
-    public GameAddDto gameAddDto(){
-        return new GameAddDto();
-    }
-    @ModelAttribute("user")
-    public User getUser(){
+    @GetMapping
+    public String getUser(Model model){
 
         String username;
 
@@ -46,17 +46,27 @@ public class MainPageController {
             username = principal.toString();
         }
 
-
-
-        return userRepository.findByUserName("daniel");
-    }*/
+        model.addAttribute("user",userRepository.findUserByUserName(username));
+        model.addAttribute("games",gameRepository.findAll());
+        return "index";
+    }
 
 
     @PostMapping
     public String home(Model model)
     {
-        User user = userRepository.findUserByUserName("daniel");
-        model.addAttribute("userInfo",user);
+        String username;
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        model.addAttribute("user",userRepository.findUserByUserName(username));
+        model.addAttribute("games",userRepository.findAll());
         return "index";
     }
 
