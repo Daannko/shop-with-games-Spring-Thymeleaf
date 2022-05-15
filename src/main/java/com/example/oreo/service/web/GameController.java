@@ -9,6 +9,8 @@ import com.example.oreo.service.GameService;
 import com.example.oreo.service.UserService;
 import com.example.oreo.service.web.dto.GameAddDto;
 import com.example.oreo.service.web.dto.UserRegistrationDto;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,8 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/game")
+public class GameController {
 
 
     private GameService gameService;
@@ -28,7 +30,7 @@ public class AdminController {
     private GameRepository gameRepository;
 
 
-    public AdminController(GameService gameService,UserService userService,UserRepository userRepository,GameRepository gameRepository) {
+    public GameController(GameService gameService,UserService userService,UserRepository userRepository,GameRepository gameRepository) {
         super();
         this.gameService = gameService;
         this.userService = userService;
@@ -36,27 +38,25 @@ public class AdminController {
         this.gameRepository = gameRepository;
     }
 
-    @ModelAttribute("game")
-    public GameAddDto gameAddDto(){
-        return new GameAddDto();
-    }
-    @ModelAttribute("user")
-    public List<User> getUsers(){
-        return userService.returnUsers();
-    }
-
-
-
-    @GetMapping
-    public String ShowAddGameForm(Model model)
+    @GetMapping(value = "{gameId}")
+    public String ShowAddGameForm(@PathVariable Integer gameId, Model model)
     {
-        model.addAttribute("game",new GameAddDto());
-        model.addAttribute("games", gameService.returnGames());
-        model.addAttribute("users", userRepository.findAll());
-        return "admin";
+        String username;
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        model.addAttribute("user",userRepository.findUserByUserName(username));
+        model.addAttribute("game",gameRepository.findGameById(gameId));
+        return "game";
     }
 
-    @PostMapping
+   /* @PostMapping
     public String AddGame(@ModelAttribute("game")GameAddDto gameAddDto)
     {
         gameService.add(gameAddDto);
@@ -78,7 +78,7 @@ public class AdminController {
             return "redirect:/admin?fail";
         }
         return "redirect:/admin?successUser";
-    }
+    }*/
 
 
 }

@@ -23,12 +23,8 @@
               class="icon-bar"></span> <span class="icon-bar"></span> <span
               class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#" th:href="@{/}">Registration and
-        Login Module</a>
-
-      <ul class="nav navbar-nav">
-        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
-      </ul>
+      <a class="navbar-brand" href="#" th:href="@{/}">GameShop</a>
+      <a class="navbar-brand" th:href="@{/logout}">Logout</a>
 
     </div>
   </div>
@@ -45,6 +41,17 @@
       <div th:if="${param.succes}">
         <div class="alert alert-info">You've successfully added the game</div>
       </div>
+      <div th:if="${param.success}">
+        <div class="alert alert-info">You've successfully deleted the game</div>
+      </div>
+      <div th:if="${param.successUser}">
+        <div class="alert alert-info">You've successfully deleted User</div>
+      </div>
+      <div th:if="${param.fail}">
+        <div class="alert alert-info">You can't delete an Admin</div>
+      </div>
+
+
 
       <h1>Admin Panel</h1>
 
@@ -62,6 +69,11 @@
                 required autofocus="autofocus" />
         </div>
         <div class="form-group">
+          <label class="control-label" for="description"> Description </label> <input
+                 id="description" class="form-control" th:field="*{description}"
+                required autofocus="autofocus" />
+        </div>
+        <div class="form-group">
           <button type="submit" class="btn btn-success">Add</button>
         </div>
       </form>
@@ -71,8 +83,10 @@
         <table>
           <thead>
           <tr>
+            <th> Id </th>
             <th> Name </th>
             <th> Price </th>
+            <th> Option </th>
           </tr>
           </thead>
           <tbody>
@@ -80,8 +94,12 @@
             <td colspan="2"> No Games Available </td>
           </tr>
           <tr th:each="game : ${games}">
+            <td class="tablespace"><span th:text="*{game.id}"> Name </span></td>
             <td class="tablespace"><span th:text="*{game.name}"> Name </span></td>
-            <td><span th:text="*{game.price}"> Price </span><span>zl.</span></td>
+            <td class="tablespace"><span th:text="*{game.price}"> Price </span><span>zl.</span></td>
+            <td class="tablespace"><a  th:href="@{admin/delete_game/{id}(id=${game.id})}" class="btn btn-danger">Delete</a></td>
+            <!--"@{images/{name}.jpg(name=${game.name})}"-->
+
           </tr>
           </tbody>
         </table>
@@ -111,11 +129,11 @@
             <td class="tablespace"><span th:text="*{user.email}"> Email </span></td>
 
             <td class="tablespace"><span th:text="*{user.returnRole()}"> Role </span></td>
+            <td th:if="${user.returnRole() != 'ROLE_ADMIN'}" class="tablespace"><a  th:href="@{admin/delete_user/{id}(id=${user.id})}" class="btn btn-danger">Delete</a></td>
           </tr>
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 </div>

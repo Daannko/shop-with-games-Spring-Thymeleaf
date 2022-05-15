@@ -47,7 +47,9 @@ public class MainPageController {
         }
 
         model.addAttribute("user",userRepository.findUserByUserName(username));
-        model.addAttribute("games",gameRepository.findAll());
+        List<Game> games = gameRepository.findAll();
+        quickSort(games,0,games.size()-1);
+        model.addAttribute("games",games);
         return "index";
     }
 
@@ -66,8 +68,65 @@ public class MainPageController {
         }
 
         model.addAttribute("user",userRepository.findUserByUserName(username));
-        model.addAttribute("games",userRepository.findAll());
+        List<Game> games = gameRepository.findAll();
+        quickSort(games,0,games.size()-1);
+        model.addAttribute("games",games);
         return "index";
+    }
+
+    static boolean compareStrings(Game g1,Game g2)
+    {
+
+        String s1 = g1.getName(),s2=g2.getName();
+        int minLen = s1.length();
+        if(minLen> s2.length()) minLen = s2.length();
+        for(int i = 0 ; i < minLen ; i++)
+        {
+            if(s1.charAt(i) < s2.charAt(i))
+            {
+                return true;
+            }
+            else if (s1.charAt(i) > s2.charAt(i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static void swap(List<Game> list,int i, int j)
+    {
+        Game temp = list.get(i);
+        list.set(i,list.get(j));
+        list.set(j,temp);
+    }
+
+    static int partition(List<Game> list ,int low, int high)
+    {
+        Game pivot = list.get(high);
+        int i = low -1;
+
+        for(int j = low; j<high-1;j++)
+        {
+            if(compareStrings(list.get(j),pivot))
+            {
+                i++;
+                swap(list,i,j);
+            }
+        }
+        if(compareStrings(list.get(i+1),list.get(high)))
+        swap(list,i+1,high);
+        return i+1;
+    }
+
+    public void quickSort(List<Game> list,int low,int high)
+    {
+        if(low<high)
+        {
+            int pi = partition(list,low,high);
+            quickSort(list,low,pi-1);
+            quickSort(list,pi+1,high);
+        }
     }
 
 }

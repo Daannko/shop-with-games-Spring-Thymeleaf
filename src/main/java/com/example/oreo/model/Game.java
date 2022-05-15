@@ -13,18 +13,33 @@ public class Game {
     private int id;
     String name;
     Integer price;
+    String description;
 
-    public Game(int id, String name, Integer price) {
+    public Game(int id, String name, Integer price,String description) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.description = description;
     }
 
-    public Game(String name, Integer price) {
+    public Game(String name, Integer price,String description) {
         this.name = name;
+        this.price = price;
+        this.description = description;
+    }
+
+
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Game() {
 

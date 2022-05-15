@@ -23,8 +23,14 @@ public class GameServiceImpl implements GameService{
     @Override
     public Game add(GameAddDto gameAddDto) {
         Game game = new Game(gameAddDto.getName(),
-                gameAddDto.getPrice());
+                gameAddDto.getPrice(),
+                gameAddDto.getDescription());
         return gameRepository.save(game);
+    }
+
+    @Override
+    public void deleteGame(String name) {
+        gameRepository.deleteByName(name);
     }
 
     @Override

@@ -4,10 +4,12 @@ public class GameAddDto {
 
     private String name;
     private int price;
+    private String description;
 
-    public GameAddDto(String name, int price) {
+    public GameAddDto(String name, int price ,String description) {
         this.name = name;
         this.price = price;
+        this.description = description;
     }
 
     public GameAddDto() {}
@@ -26,5 +28,13 @@ public class GameAddDto {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

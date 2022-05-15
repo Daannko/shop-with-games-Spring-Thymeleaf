@@ -8,5 +8,6 @@ import java.util.List;
 public interface GameService {
 
     Game add(GameAddDto gameAddDto);
+    void deleteGame(String name);
     List<Game> returnGames();
 }
