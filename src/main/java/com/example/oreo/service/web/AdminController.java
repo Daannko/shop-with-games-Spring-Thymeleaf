@@ -46,7 +46,6 @@ public class AdminController {
     }
 
 
-
     @GetMapping
     public String ShowAddGameForm(Model model)
     {

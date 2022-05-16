@@ -55,3 +55,16 @@ img {
     height: 560px;
     width: 400px;
 }
+
+.key
+{
+    text-shadow: 0 0 16px white;
+    color: transparent;
+    padding: 10px;
+}
+.key:hover
+{
+    text-shadow: none;
+    color: #7a7a7a ;
+    padding: 10px;
+}
