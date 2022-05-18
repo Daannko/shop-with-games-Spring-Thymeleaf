@@ -8,16 +8,15 @@ import com.example.oreo.repository.UserRepository;
 import com.example.oreo.service.GameService;
 import com.example.oreo.service.UserService;
 import com.example.oreo.service.web.dto.GameAddDto;
+import com.example.oreo.service.web.dto.UserRegistrationDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/")
@@ -53,12 +52,10 @@ public class MainPageController {
         return "index";
     }
 
-
     @PostMapping
-    public String home(Model model)
-    {
-        String username;
+    public String index(@RequestParam String text, Model model){
 
+        String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails) {
@@ -69,8 +66,21 @@ public class MainPageController {
 
         model.addAttribute("user",userRepository.findUserByUserName(username));
         List<Game> games = gameRepository.findAll();
+        for(int i =0 ; i < games.size() ; i++)
+        {
+            if(!games.get(i).getName().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT)))
+            {
+                games.remove(i);
+                i--;
+            }
+        }
+
+
         quickSort(games,0,games.size()-1);
+
         model.addAttribute("games",games);
+
+
         return "index";
     }
 

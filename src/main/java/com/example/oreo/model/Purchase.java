@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="purchase",uniqueConstraints = { @UniqueConstraint(columnNames = { "gameKey"}) })
-public class Purchase {
+public class Purchase implements Comparable<Purchase>{
 
 
     @Id
@@ -31,6 +31,7 @@ public class Purchase {
     {
 
     }
+
     public Purchase(int id, int clientId, int gameId, int gamePrice, String gameKey, Date date) {
         this.id = id;
         this.clientId = clientId;
@@ -86,5 +87,14 @@ public class Purchase {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public int compareTo(Purchase o) {
+        Date date1 = this.date;
+        Date date2 = o.date;
+        if(date1.before(date2)) return 1;
+        else if (date2.before(date1)) return -1;
+        return 0;
     }
 }

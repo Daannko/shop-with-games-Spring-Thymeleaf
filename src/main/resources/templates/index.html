@@ -26,7 +26,9 @@
             <!-- NAVBAR ZAWARTOSC-->
             <div>
                 <a class="navbar-brand" href="#" th:href="@{/}">GameShop</a>
+                <a class="navbar-brand" th:href="@{/profile}">Profile</a>
                 <a class ="navbar-brand" th:href="@{/logout}">Logout</a></li>
+
                 <a class ="navbar-brand" th:if="${user.returnRole() == 'ROLE_ADMIN'}" th:href="@{/admin}">Admin Panel</a>
 
             </div>
@@ -40,17 +42,25 @@
 <div class="container">
     <div>
         <h2>All games:</h2>
+        <div style="width: 100%; align-content: center;">
+            <form th:action="@{/}"  method="post" >
+                <input type="text" th:value="${text}" name="text"/>
+                <input type="submit" th:value="Wyszukaj"></input>
+            </form>
+        </div>
+
+
 
         <div class="flex-container">
 
-                  <div class="gamecontainer" th:each="game : ${games}"  >
-                      <a  th:href="@{game/{id}(id=${game.id})}" >
-                      <img  th:src="@{images/{name}.jpg(name=${game.name})}" style ="    border-bottom: 1px solid black;" alt="error"/>
-                      <div class="onimage">
-                          <span th:text="${game.name}"> Name </span>
-                          <span th:if="${game.price > 20}" th:text="${game.price}"> Price </span><span  th:if="${game.price > 20}">$</span>
-                      </div>
-                      </a>
+                  <div class="gamecontainer" th:each="game : ${games}"  th:if="${game.visible}" >
+                          <a  th:href="@{game/{id}(id=${game.id})}" >
+                              <img  th:src="@{images/{name}.jpg(name=${game.name})}" style ="    border-bottom: 1px solid black;" alt="error"/>
+                              <div class="onimage">
+                                  <span th:text="${game.name}"> Name </span>
+                                  <span th:if="${game.price > 20}" th:text="${game.price}"> Price </span><span  th:if="${game.price > 20}">$</span>
+                              </div>
+                          </a>
                   </div>
 
         </div>

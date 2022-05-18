@@ -55,11 +55,28 @@ public class AdminController {
         return "admin";
     }
 
+
     @PostMapping
     public String AddGame(@ModelAttribute("game")GameAddDto gameAddDto)
     {
         gameService.add(gameAddDto);
         return "redirect:/admin?succes";
+    }
+
+    @RequestMapping(value = "/visible/{personId}",method = RequestMethod.GET)
+    public String handleChangeVisibilityOfGame(@PathVariable Integer personId) {
+        Game game = gameRepository.findGameById(personId);
+        if(game.getVisible())
+        {
+            game.setVisible(false);
+        }
+        else
+        {
+            game.setVisible(true);
+        }
+        gameRepository.save(game);
+
+        return "redirect:/admin?successVisible";
     }
 
     @RequestMapping(value = "/delete_game/{personId}",method = RequestMethod.GET)

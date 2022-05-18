@@ -24,7 +24,9 @@
               class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="#" th:href="@{/}">GameShop</a>
+      <a class="navbar-brand" th:href="@{/profile}">Profile</a>
       <a class="navbar-brand" th:href="@{/logout}">Logout</a>
+
 
     </div>
   </div>
@@ -57,25 +59,25 @@
 
       <h2>Add game:</h2>
       <form th:action="@{/admin}" method="post" th:object="${game}">
-        <div class="form-group">
-          <label class="control-label" for="name"> Name </label>
-          <input id="name" class="form-control" th:field="*{name}"
-                 required autofocus="autofocus" />
-        </div>
+          <div class="form-group">
+            <label class="control-label" for="name"> Name </label>
+            <input id="name" class="form-control" th:field="*{name}"
+                   required autofocus="autofocus" />
+          </div>
 
-        <div class="form-group">
-          <label class="control-label" for="price"> Price </label> <input
-                id="price" class="form-control" th:field="*{price}"
-                required autofocus="autofocus" />
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="description"> Description </label> <input
-                 id="description" class="form-control" th:field="*{description}"
-                required autofocus="autofocus" />
-        </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-success">Add</button>
-        </div>
+          <div class="form-group">
+            <label class="control-label" for="price"> Price </label> <input
+                  id="price" class="form-control" th:field="*{price}"
+                  required autofocus="autofocus" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="description"> Description </label> <input
+                   id="description" class="form-control" th:field="*{description}"
+                  required autofocus="autofocus" />
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Add</button>
+          </div>
       </form>
 
       <div>
@@ -86,7 +88,8 @@
             <th> Id </th>
             <th> Name </th>
             <th> Price </th>
-            <th> Option </th>
+
+            <th> Visibility </th>
           </tr>
           </thead>
           <tbody>
@@ -95,9 +98,11 @@
           </tr>
           <tr th:each="game : ${games}">
             <td class="tablespace"><span th:text="*{game.id}"> Name </span></td>
-            <td class="tablespace"><span th:text="*{game.name}"> Name </span></td>
-            <td class="tablespace"><span th:text="*{game.price}"> Price </span><span>zl.</span></td>
+            <a th:href="@{game/{id}(id=${game.id})}"><td class="tablespace"><span th:text="*{game.name}"> Name </span></td></a>
+            <td class="tablespace"><span th:text="*{game.price}"> Price </span><span>zl.</span>
+            <td class="tablespace"><span th:text="*{game.visible}"> Price </span>
             <td class="tablespace"><a  th:href="@{admin/delete_game/{id}(id=${game.id})}" class="btn btn-danger">Delete</a></td>
+            <td class="tablespace"><a  th:href="@{admin/visible/{id}(id=${game.id})}" class="btn btn-danger">Change Visibility</a></td>
             <!--"@{images/{name}.jpg(name=${game.name})}"-->
 
           </tr>
@@ -138,6 +143,10 @@
   </div>
 </div>
 
+<br>
+<br>
+<br>
+<br><br><br>
 
 </body>
 </html>

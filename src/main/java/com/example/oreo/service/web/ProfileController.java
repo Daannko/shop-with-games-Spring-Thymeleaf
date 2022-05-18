@@ -16,34 +16,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeMap;
 
 
 @Controller
-@RequestMapping("/game")
-public class GameController {
+@RequestMapping("/profile")
+public class ProfileController
+{
 
-
-    private GameService gameService;
-    private UserService userService;
     private UserRepository userRepository;
     private GameRepository gameRepository;
     private PurchuseRepository purchuseRepository;
 
 
-    public GameController(GameService gameService,UserService userService,UserRepository userRepository,GameRepository gameRepository,
+    public ProfileController(UserRepository userRepository,GameRepository gameRepository,
                           PurchuseRepository purchuseRepository) {
         super();
-        this.gameService = gameService;
-        this.userService = userService;
         this.userRepository = userRepository;
         this.gameRepository = gameRepository;
         this.purchuseRepository = purchuseRepository;
     }
 
-    @GetMapping(value = "{gameId}")
-    public String ShowAddGameForm(@PathVariable Integer gameId, Model model)
+    @GetMapping(value = "")
+    public String ShowAddGameForm(Model model)
     {
         String username;
 
@@ -56,40 +54,35 @@ public class GameController {
         }
 
         User user = userRepository.findUserByUserName(username);
-
-        List<Game> games = gameRepository.findAll();
-        for(int i =0 ;i <= games.size() ; i++)
-        {
-            if(games.get(i).getId() == gameId)
-            {
-                if(games.get(i).getVisible() || user.returnRole().equals("ROLE_ADMIN"))
-                    break;
-            }
-            if(i == games.size()-1) return "redirect:/";
-
-        }
-
-        Purchase purchase = null;
         List<Purchase> purchases = purchuseRepository.findAll();
+        List<Game> games= gameRepository.findAll();
+
+        TreeMap<Purchase,Game> gamesInfo = new TreeMap<>();
+
         for(Purchase entry : purchases)
         {
-            if(entry.getClientId() == user.getId() && entry.getGameId() == gameId)
+            if(entry.getClientId() == user.getId())
             {
-                purchase = entry;
+                for(Game game: games)
+                {
+                    if(entry.getGameId() == game.getId())
+                    {
+                        gamesInfo.put(entry,game);
+                        break;
+                    }
+                }
+
             }
         }
 
         model.addAttribute("user",user);
-        model.addAttribute("game",gameRepository.findGameById(gameId));
-        model.addAttribute("purchase",purchase);
+        model.addAttribute("gamesInfo",gamesInfo);
 
 
-
-        return "game";
-
+        return "profile";
     }
 
-    @PostMapping(value = "{gameId}")
+  /*  @PostMapping(value = "{gameId}")
     public String AddPurchuse(@PathVariable Integer gameId)
     {
         String username;
@@ -101,10 +94,8 @@ public class GameController {
         } else {
             username = principal.toString();
         }
-
         Game game = gameRepository.findGameById(gameId);
         User user = userRepository.findUserByUserName(username);
-
 
         int length = 32;
         boolean useLetters = true;
@@ -120,7 +111,7 @@ public class GameController {
         Purchase purchase  = new Purchase(user.getId(), game.getId(), game.getPrice(), key,new Date());
         return purchuseRepository.save(purchase);
     }
-
+*/
     /*
     @RequestMapping(value = "/delete_game/{personId}",method = RequestMethod.GET)
     public String handleDeleteGame(@PathVariable Integer personId) {

@@ -14,20 +14,30 @@ public class Game {
     String name;
     Integer price;
     String description;
+    Boolean visible;
 
-    public Game(int id, String name, Integer price,String description) {
+    public Game(int id, String name, Integer price,String description,Boolean visible) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.visible = visible;
     }
 
-    public Game(String name, Integer price,String description) {
+    public Game(String name, Integer price,String description,Boolean visible) {
         this.name = name;
         this.price = price;
         this.description = description;
+        this.visible = visible;
     }
 
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
 
     public void setPrice(Integer price) {
         this.price = price;

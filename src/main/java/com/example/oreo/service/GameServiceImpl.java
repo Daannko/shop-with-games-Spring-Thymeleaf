@@ -24,7 +24,7 @@ public class GameServiceImpl implements GameService{
     public Game add(GameAddDto gameAddDto) {
         Game game = new Game(gameAddDto.getName(),
                 gameAddDto.getPrice(),
-                gameAddDto.getDescription());
+                gameAddDto.getDescription(),true);
         return gameRepository.save(game);
     }
 
